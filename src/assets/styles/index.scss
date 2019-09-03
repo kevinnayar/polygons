@@ -1,0 +1,168 @@
+@import 'normalize.css';
+@import 'vars.scss';
+
+body {
+  font-family: 'Montserrat', 'Helvetica', 'Arial', sans-serif;
+  font-size: 62.5%;
+}
+
+body * {
+  box-sizing: border-box;
+}
+
+
+.app {
+  position: relative;
+  background: url('../images/bg-clouds.jpg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+// .polygons {
+//   background: white url('../images/machu-picchu.jpg') center 70px no-repeat;
+//   background-size: 1061px;
+// }
+.polygons {
+  position: relative;
+  background: linear-gradient(
+    rgba(146, 210, 240, 0.75) 0%,
+    rgba(60, 95, 149, 0.75) 25%,
+    rgba(	149, 182, 222, 0.75) 25%,
+    rgba(60, 95, 149, 0.75) 50%,
+    rgba(146, 210, 240, 0.75) 50%,
+    rgba(60, 95, 149, 0.75) 75%,
+    rgba(	149, 182, 222, 0.75) 75%,
+    rgba(60, 95, 149, 0.75) 100%,
+  );
+  background-size: 100% 400%;
+  @include transition-all(1s);
+}
+.app.page-0 .polygons {
+  background-position: 0 -100%;
+}
+.app.page-1 .polygons {
+  background-position: 0 -66.6667%;
+}
+.app.page-2 .polygons {
+  background-position: 0 -33.3333%;
+}
+.app.page-3 .polygons {
+  background-position: 0 0;
+}
+
+.svg {
+  position: absolute;
+  top: 0;
+  left: 50%;
+
+  circle,
+  path,
+  line {
+    @include transition-all(1s);
+  }
+}
+
+.title {
+  margin: 0;
+  position: absolute;
+  top: 44px;
+  left: 50px;
+  font-size: 5em;
+  color: $color-light-2;
+  width: calc(100% - 200px);
+  
+  .title-number {
+    width: 120px;
+    margin-right: 30px;
+    font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  }
+  .title-text {
+    position: absolute;
+    left: 90px;
+  }
+}
+
+.meta-data {
+  margin: 0;
+  position: absolute;
+  top: 115px;
+  left: 140px;
+  font-size: 1.8em;
+  color: $color-light-2;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
+
+.nav {
+  position: absolute;
+  right: 50px;
+  top: 50px;
+  display: flex;
+  width: 101px;
+
+  .nav-btn {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    background: $color-light-2;
+    cursor: pointer;
+    @include transition-all(.2s);
+
+    &:hover {
+      background: $color-light-1;
+    }
+
+    .material-icons {
+      line-height: 50px;
+      width: 100%;
+      color: $color-mid-2;
+      @include transition-all(.2s);
+
+      &:hover {
+        color: $color-mid-3;
+      }
+    }
+
+    &.nav-next {
+      border-left: 1px solid $color-light-3;
+    }
+  }
+}
+
+.photos {
+  display: flex;
+  flex-wrap: wrap;
+  background: $color-light-2;
+  background: linear-gradient($color-light-3, $color-light-2);
+  min-height: 14.6348vh;
+
+  .photo {
+    width: 19.5122%;
+    
+    &.narrow {
+      width: 10.9756%;
+    }
+  }
+}
+
+.app.fade-false {
+  .title,
+  .meta-data,
+  .svg line,
+  .svg text,
+  .photo {
+    opacity: 0;
+  }
+}
+
+.app.fade-true {
+  .title,
+  .meta-data {
+    animation: fadeUp .4s $cubicBezier forwards;
+  }
+  .svg line,
+  .svg text,
+  .photo {
+    animation: fadeIn 1.5s $cubicBezier forwards;
+  }
+}

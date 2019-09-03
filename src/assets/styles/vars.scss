@@ -1,0 +1,36 @@
+$color-teal-light:    #27658d;
+$color-lime:          #bfd5c2;
+$color-coral:         #e66465;
+$color-violet:        #9198e5;
+
+$color-light-1: #FFFFFF;
+$color-light-2: #E4E6EA;
+$color-light-3: #C2C6CE;
+
+$color-mid-1: #8A989E;
+$color-mid-2: #79878D;
+$color-mid-3: #46545A;
+
+$color-dark-1: #272D36;
+$color-dark-2: #313642;
+$color-dark-3: #454545;
+
+$cubicBezier: cubic-bezier(0.4, 0.0, 0.2, 1);
+
+@mixin transition-all($time) {
+  transition: all $time $cubicBezier;
+}
+
+@mixin transition-one($property, $time) {
+  transition: $property $time $cubicBezier;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  0%    { transform: translateY(100%);  opacity: 0; }
+  100%  { transform: translateY(0);     opacity: 1; }
+}
