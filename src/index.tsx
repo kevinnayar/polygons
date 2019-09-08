@@ -19,28 +19,35 @@ import {
 import { data } from './data/data';
 import './assets/styles/index.scss';
 
+
 type TypeAppState = {
   page: number;
   fade: boolean;
   modalVisible: boolean;
-  modalImgSrc: null|string;
+  modalImgSrc: null | string;
   modalImgIsNarrow: boolean;
+  width: number;
+  height: number;
 };
 
 class App extends React.Component<{}, TypeAppState> {
   constructor(props: {}) {
     super(props);
+    const width: number = document.body.clientWidth * (1 - this.BUFFER);
+    const height: number = width / 2;
+
     this.state = {
       page: 0,
       fade: true,
       modalVisible: false,
       modalImgSrc: null,
       modalImgIsNarrow: false,
+      width,
+      height,
     };
   }
 
-  WIDTH: number = 1200;
-  HEIGHT: number = 600;
+  BUFFER: number = 0.10;
   NUM_PAGES: number = 5;
   STROKE_WIDTH: number = 0.75;
   RADIUS: number = 3;
@@ -87,6 +94,14 @@ class App extends React.Component<{}, TypeAppState> {
     });
   }
 
+  handleWindowResize = () => {
+    const width: number = document.body.clientWidth * (1 - this.BUFFER);
+    const height: number = width / 2;
+    this.setState({
+      width,
+      height,
+    });
+  }
 
   handleKeyDown = (event: KeyboardEvent) => {
     // right
@@ -112,11 +127,13 @@ class App extends React.Component<{}, TypeAppState> {
       }, this.INIT_TIMEOUT_TIME);
     }
     document.addEventListener('keydown', this.handleKeyDown, false);
+    window.addEventListener('resize', this.handleWindowResize);
   }
 
   componentWillUnmount() {
     clearTimeout(this.TIMEOUT_ID);
     document.removeEventListener('keydown', this.handleKeyDown, false);
+    window.removeEventListener('resize', this.handleWindowResize);
   }
 
   render() {
@@ -128,7 +145,7 @@ class App extends React.Component<{}, TypeAppState> {
       >
         {pageData && (
           <Wrapper className="content">
-            <Wrapper className="polygons" height={this.HEIGHT}>
+            <Wrapper className="polygons" height={this.state.height}>
               {pageData.points.map(
                 (points: TypeTrianglePoints, index: number) => {
                   const fillColor: string = getRandomColorWithSpecificAlpha(
@@ -140,8 +157,8 @@ class App extends React.Component<{}, TypeAppState> {
                       key={`polygon.${index}`}
                       page={this.state.page}
                       points={points}
-                      width={this.WIDTH}
-                      height={this.HEIGHT}
+                      width={this.state.width}
+                      height={this.state.height}
                       shapeFill={fillColor}
                       shapeStrokeColor={pageData.strokeColor}
                       shapeStrokeWidth={this.STROKE_WIDTH}
@@ -158,8 +175,8 @@ class App extends React.Component<{}, TypeAppState> {
                     key={`marker.${index}`}
                     point={points}
                     label={label}
-                    width={this.WIDTH}
-                    height={this.HEIGHT}
+                    width={this.state.width}
+                    height={this.state.height}
                     shapeStrokeColor={pageData.strokeColor}
                     shapeStrokeWidth={this.STROKE_WIDTH}
                   />
@@ -183,6 +200,7 @@ class App extends React.Component<{}, TypeAppState> {
             <Photos
               folder={pageData.id}
               max={this.NUM_IMAGES}
+              width={this.state.width * 100 / ((1 - this.BUFFER) * 100)}
               onClick={(imgSrc: string, isNarrow: boolean) => this.handleImageClick(imgSrc, isNarrow)}
             />
           </Wrapper>
@@ -191,6 +209,7 @@ class App extends React.Component<{}, TypeAppState> {
           visible={this.state.modalVisible}
           imgSrc={this.state.modalImgSrc}
           isNarrow={this.state.modalImgIsNarrow}
+          width={this.state.width}
           onClose={this.handleModalClose}
         />
       </Wrapper>
@@ -198,4 +217,4 @@ class App extends React.Component<{}, TypeAppState> {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App />, document.getElementById('polygons'));

@@ -10,11 +10,12 @@ const imagesWashburn: Object = require('../assets/images/mount-washburn/*.jpg');
 // @ts-ignore
 const imagesBeckler: Object = require('../assets/images/beckler-peak/*.jpg');
 
-export function Photos(props: { 
-  folder: string; 
+export function Photos(props: {
+  folder: string;
   max: number;
-  onClick: (imgSrc: string, isNarrow: boolean) => void,
- }) {
+  width: number;
+  onClick: (imgSrc: string, isNarrow: boolean) => void;
+}) {
   let images: Object = {};
 
   if (props.folder === 'grays-and-torreys') {
@@ -33,11 +34,17 @@ export function Photos(props: {
     <div className="photos">
       {Array.from(Array(props.max).keys()).map((_n: any, i: number) => {
         const isNarrow: boolean = i === 0 || i === 3;
+        const imgWidth: number = isNarrow ? props.width * 0.21951219512 : props.width * 0.39024390243;
+
         return (
           <img
             key={i}
-            className={`photo${isNarrow ? ' narrow' : ''}`}
+            className="photo"
             src={images[i]}
+            style={{
+              width: `${imgWidth}px`,
+              height: 'auto',
+            }}
             onClick={() => props.onClick(images[i], isNarrow)}
           />
         );
