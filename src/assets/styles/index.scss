@@ -4,51 +4,24 @@
 body {
   font-family: 'Montserrat', 'Helvetica', 'Arial', sans-serif;
   font-size: 62.5%;
-}
+  min-height: 920px;
 
-body * {
-  box-sizing: border-box;
+  * {
+    box-sizing: border-box;
+  }
 }
-
 
 .app {
   position: relative;
-  background: url('../images/bg-clouds.jpg');
-  background-position: center center;
-  background-repeat: no-repeat;
+  background: url('../images/bg-clouds.jpg') center center no-repeat;
   background-size: cover;
 }
 
-// .polygons {
-//   background: white url('../images/machu-picchu.jpg') center 70px no-repeat;
-//   background-size: 1061px;
-// }
 .polygons {
   position: relative;
-  background: linear-gradient(
-    rgba(146, 210, 240, 0.75) 0%,
-    rgba(60, 95, 149, 0.75) 25%,
-    rgba(	149, 182, 222, 0.75) 25%,
-    rgba(60, 95, 149, 0.75) 50%,
-    rgba(146, 210, 240, 0.75) 50%,
-    rgba(60, 95, 149, 0.75) 75%,
-    rgba(	149, 182, 222, 0.75) 75%,
-    rgba(60, 95, 149, 0.75) 100%,
-  );
-  background-size: 100% 400%;
-  @include transition-all(1s);
-}
-.app.page-0 .polygons {
-  background-position: 0 -100%;
-}
-.app.page-1 .polygons {
-  background-position: 0 -66.6667%;
-}
-.app.page-2 .polygons {
-  background-position: 0 -33.3333%;
-}
-.app.page-3 .polygons {
-  background-position: 0 0;
+  background: linear-gradient($color-red-alpha, $color-blue-alpha);
+  // background: black url('../images/beckler.jpg') center 120px no-repeat;
+  // background-size: 661px;
 }
 
 .svg {
@@ -87,8 +60,8 @@ body * {
   margin: 0;
   position: absolute;
   top: 115px;
-  left: 140px;
-  font-size: 1.8em;
+  left: 142px;
+  font-size: 1.6em;
   color: $color-light-2;
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
 }
@@ -132,16 +105,92 @@ body * {
 .photos {
   display: flex;
   flex-wrap: wrap;
-  background: $color-light-2;
-  background: linear-gradient($color-light-3, $color-light-2);
+  background: $color-light-1;
   min-height: 14.6348vh;
 
   .photo {
     width: 19.5122%;
-    
+    opacity: 0;
+    cursor: pointer;
+    @include transition-all(.2s);
+
     &.narrow {
       width: 10.9756%;
     }
+
+    &:hover {
+      filter: brightness(80%);
+    }
+  }
+}
+
+.modal {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+
+  .image {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -460px;
+    margin-top: -350px;
+    padding: 20px;
+    background: $color-light-2;
+    opacity: 0;
+    animation: fadeUpMini .4s $cubicBezier forwards;
+
+    &.narrow {
+      width: 495px;
+      height: 660px;
+      margin-left: -248px;
+      margin-top: -330px;
+    }
+  }
+
+  .close-btn {
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    margin-right: -430px;
+    margin-top: -320px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: $color-light-2;
+    text-align: center;
+    background: $color-light-2;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeUpMini .4s $cubicBezier forwards;
+    @include transition-all(.2s);
+
+    &.narrow {
+      margin-right: -218px;
+      margin-top: -300px;
+    }
+
+    &:hover {
+      background: $color-light-1;
+    }
+
+    .material-icons {
+      line-height: 50px;
+      color: $color-mid-2;
+      @include transition-all(.2s);
+
+      &:hover {
+        color: $color-mid-3;
+      }
+    }
+  }
+
+  &.display-false {
+    display: none;
+    opacity: 0;
   }
 }
 
@@ -163,6 +212,14 @@ body * {
   .svg line,
   .svg text,
   .photo {
-    animation: fadeIn 1.5s $cubicBezier forwards;
+    animation: fadeUpMini .4s $cubicBezier forwards;
+  }
+}
+
+@for $i from 1 through 8 {
+  .app.fade-true .photo {
+    &:nth-child(#{$i}) {
+      animation-delay: $i * (1s / 8);
+    }
   }
 }

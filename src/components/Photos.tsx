@@ -1,25 +1,44 @@
 import * as React from 'react';
+// @ts-ignore
+const imagesGraysTorreys: Object = require('../assets/images/grays-and-torreys/*.jpg');
+// @ts-ignore
+const imagesEverest: Object = require('../assets/images/mount-everest-basecamp/*.jpg');
+// @ts-ignore
+const imagesMachuPicchu: Object = require('../assets/images/machu-picchu/*.jpg');
+// @ts-ignore
+const imagesWashburn: Object = require('../assets/images/mount-washburn/*.jpg');
+// @ts-ignore
+const imagesBeckler: Object = require('../assets/images/beckler-peak/*.jpg');
 
-
-export function Photos(props: { folder: string; max: number }) {
+export function Photos(props: { 
+  folder: string; 
+  max: number;
+  onClick: (imgSrc: string, isNarrow: boolean) => void,
+ }) {
   let images: Object = {};
 
   if (props.folder === 'grays-and-torreys') {
-    images = require('../assets/images/grays-and-torreys/*.jpg');
+    images = imagesGraysTorreys;
   } else if (props.folder === 'mount-everest-basecamp') {
-    images = require('../assets/images/mount-everest-basecamp/*.jpg');
+    images = imagesEverest;
   } else if (props.folder === 'machu-picchu') {
-    images = require('../assets/images/machu-picchu/*.jpg');
+    images = imagesMachuPicchu;
+  } else if (props.folder === 'mount-washburn') {
+    images = imagesWashburn;
+  } else if (props.folder === 'beckler-peak') {
+    images = imagesBeckler;
   }
 
   return (
     <div className="photos">
       {Array.from(Array(props.max).keys()).map((_n: any, i: number) => {
+        const isNarrow: boolean = i === 0 || i === 3;
         return (
           <img
             key={i}
-            className={`photo${i === 0 || i === props.max - 1 ? ' narrow' : ''}`}
+            className={`photo${isNarrow ? ' narrow' : ''}`}
             src={images[i]}
+            onClick={() => props.onClick(images[i], isNarrow)}
           />
         );
       })}

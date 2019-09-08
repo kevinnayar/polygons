@@ -7,7 +7,6 @@ export function Marker(props: {
   label: void | string;
   width: number;
   height: number;
-  shapeFill: string;
   shapeStrokeColor: string;
   shapeStrokeWidth: number;
 }) {
@@ -15,7 +14,7 @@ export function Marker(props: {
     Math.floor(props.point[0] * props.width),
     Math.floor(props.point[1] * props.height),
   ];
-  const endPoint: TypeLinePoints = [startPoint[0] + 55, startPoint[1] - 20];
+  const endPoint: TypeLinePoints = [startPoint[0] + 30, startPoint[1] - 20];
 
   return (
     <Wrapper
