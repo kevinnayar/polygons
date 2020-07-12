@@ -26,6 +26,7 @@ type TypeAppState = {
   modalVisible: boolean;
   modalImgSrc: null | string;
   modalImgIsNarrow: boolean;
+  clientWidth: number;
   width: number;
   height: number;
 };
@@ -33,8 +34,9 @@ type TypeAppState = {
 class App extends React.Component<{}, TypeAppState> {
   constructor(props: {}) {
     super(props);
-    const width: number = document.body.clientWidth * (1 - this.BUFFER);
-    const height: number = width / 2;
+    const clientWidth = document.body.clientWidth;
+    const width = clientWidth * (1 - this.BUFFER);
+    const height = width / 2;
 
     this.state = {
       page: 0,
@@ -42,16 +44,18 @@ class App extends React.Component<{}, TypeAppState> {
       modalVisible: false,
       modalImgSrc: null,
       modalImgIsNarrow: false,
+      clientWidth,
       width,
       height,
     };
   }
 
-  BUFFER: number = 0.10;
+  BUFFER: number = 0.381967;
   NUM_PAGES: number = 5;
   STROKE_WIDTH: number = 0.75;
   RADIUS: number = 3;
   NUM_IMAGES: number = 6;
+
   TIMEOUT_ID: any = 0;
   INIT_TIMEOUT_TIME: number = 0;
   TIMEOUT_TIME: number = 800;
@@ -95,9 +99,11 @@ class App extends React.Component<{}, TypeAppState> {
   }
 
   handleWindowResize = () => {
-    const width: number = document.body.clientWidth * (1 - this.BUFFER);
-    const height: number = width / 2;
+    const clientWidth = document.body.clientWidth;
+    const width = clientWidth * (1 - this.BUFFER);
+    const height = width / 2;
     this.setState({
+      clientWidth,
       width,
       height,
     });
@@ -137,7 +143,10 @@ class App extends React.Component<{}, TypeAppState> {
   }
 
   render() {
+    // if (this.state.clientWidth <= 500) return null;
+
     const pageData: void | TypePageData = data[this.state.page];
+    const contentHeight = this.state.height * 0.96;
 
     return (
       <Wrapper
@@ -158,7 +167,7 @@ class App extends React.Component<{}, TypeAppState> {
                       page={this.state.page}
                       points={points}
                       width={this.state.width}
-                      height={this.state.height}
+                      height={contentHeight}
                       shapeFill={fillColor}
                       shapeStrokeColor={pageData.strokeColor}
                       shapeStrokeWidth={this.STROKE_WIDTH}
@@ -168,27 +177,34 @@ class App extends React.Component<{}, TypeAppState> {
                   );
                 },
               )}
-              {pageData.markers.points.map((points: TypeLinePoints, index: number) => {
-                const label: void | string = pageData.markers.labels[index];
-                return (
-                  <Marker
-                    key={`marker.${index}`}
-                    point={points}
-                    label={label}
-                    width={this.state.width}
-                    height={this.state.height}
-                    shapeStrokeColor={pageData.strokeColor}
-                    shapeStrokeWidth={this.STROKE_WIDTH}
-                  />
-                );
-              })}
+              {this.state.clientWidth > 768 &&
+                pageData.markers.points.map(
+                  (points: TypeLinePoints, index: number) => {
+                    const label: void | string = pageData.markers.labels[index];
+                    return (
+                      <Marker
+                        key={`marker.${index}`}
+                        point={points}
+                        label={label}
+                        width={this.state.width}
+                        height={contentHeight}
+                        shapeStrokeColor={pageData.strokeColor}
+                        shapeStrokeWidth={this.STROKE_WIDTH}
+                      />
+                    );
+                  },
+                )}
               <Text type="h1" className="title">
                 <span className="title-number">
-                  {this.state.page === 0 ? '01.' : `0${this.state.page.toString()}.`}
+                  {this.state.page === 0
+                    ? '01.'
+                    : `0${this.state.page.toString()}.`}
                 </span>
                 <span className="title-text">{pageData.title}</span>
               </Text>
-              <MetaData metaData={pageData.metaData} />
+              {this.state.clientWidth > 768 && (
+                <MetaData metaData={pageData.metaData} />
+              )}
               <Nav
                 page={this.state.page}
                 max={this.NUM_PAGES}
@@ -200,8 +216,10 @@ class App extends React.Component<{}, TypeAppState> {
             <Photos
               folder={pageData.id}
               max={this.NUM_IMAGES}
-              width={this.state.width * 100 / ((1 - this.BUFFER) * 100)}
-              onClick={(imgSrc: string, isNarrow: boolean) => this.handleImageClick(imgSrc, isNarrow)}
+              width={(this.state.width * 100) / ((1 - this.BUFFER) * 100)}
+              onClick={(imgSrc: string, isNarrow: boolean) =>
+                this.handleImageClick(imgSrc, isNarrow)
+              }
             />
           </Wrapper>
         )}

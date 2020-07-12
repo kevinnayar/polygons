@@ -34,7 +34,12 @@ export function Photos(props: {
     <div className="photos">
       {Array.from(Array(props.max).keys()).map((_n: any, i: number) => {
         const isNarrow: boolean = i === 0 || i === 3;
-        const imgWidth: number = isNarrow ? props.width * 0.21951219512 : props.width * 0.39024390243;
+        const imgWidth: number = isNarrow
+          ? (props.width * 0.21951219512 / 2)
+          : (props.width * 0.39024390243 / 2);
+        const imgHeight: number = isNarrow
+          ? imgWidth * 1.33
+          : imgWidth * .75;
 
         return (
           <img
@@ -43,7 +48,8 @@ export function Photos(props: {
             src={images[i]}
             style={{
               width: `${imgWidth}px`,
-              height: 'auto',
+              
+              height: `${imgHeight}px`,
             }}
             onClick={() => props.onClick(images[i], isNarrow)}
           />

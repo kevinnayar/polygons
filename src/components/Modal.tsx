@@ -11,7 +11,7 @@ export function Modal(props: {
   let imgWidth: number = 880;
 
   if (props.width < 412) {
-    imgWidth = 380;
+    imgWidth = 300;
   } else if (props.width < 768) {
     imgWidth = 440;
   } else if (props.width < 1024) {
